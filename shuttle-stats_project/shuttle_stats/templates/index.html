@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Shuttle Stats</title>
+    </head>
+    <body>
+        <h1>Shuttle Stats</h1>
+        <p>Welcome to the Shuttle Stats app!</p>
+        <a href="/add">Add a new match</a>
+
+        <h2>Win Rates</h2>
+        <ul>
+            {% for player, rate in rates.items() %}
+                <li>{{ player }}: {{ "%.1f"|format(rate * 100) }}%</li>
+            {% endfor %}
+        </ul>
+        <h2>Match History</h2>
+        <ul>
+            {% for match in matches %}
+                <li>{{ match.player1 }} {{ match.player1_score }} - {{ match.player2_score }} {{ match.player2 }} (Winner: {{ match.winner }})</li>
+            {% endfor %}
+        </ul>
+    </body>
+</html>

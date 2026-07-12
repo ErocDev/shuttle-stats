@@ -2,6 +2,7 @@
 from datetime import date
 from shuttle_stats.models import Match
 from shuttle_stats.stats import win_rates
+from shuttle_stats.app import app
 
 def main() -> None:
     # test data
@@ -18,4 +19,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    app.run(debug=True)
