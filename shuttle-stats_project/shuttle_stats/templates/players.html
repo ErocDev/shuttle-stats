@@ -14,6 +14,9 @@
         <ul>
             {% for player in players %}
                 <li>{{ player.name }}</li>
+                <form method="POST" action="/players/{{ loop.index0 }}/delete" style="display:inline;" onsubmit="return confirm('Delete this player?');">
+                    <button type="submit">Delete</button>
+                </form>
             {% endfor %}
         </ul>
         <a href="/">Back to Home</a>

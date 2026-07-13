@@ -58,3 +58,21 @@ def match_detail(match_id):
     
     match = matches[match_id]
     return render_template("match_detail.html", match=match, match_id=match_id)
+
+@app.route("/match/<int:match_id>/delete", methods=["POST"])
+def delete_match(match_id):
+    if match_id < 0 or match_id >= len(matches):
+        return "Match not found", 404
+    
+    matches.pop(match_id)
+    save_data(matches, players)
+    return redirect("/")
+
+@app.route("/players/<int:player_id>/delete", methods=["POST"])
+def delete_player(player_id):
+    if player_id < 0 or player_id >= len(players):
+        return "Player not found", 404
+
+    players.pop(player_id)
+    save_data(matches, players)
+    return redirect("/players")
