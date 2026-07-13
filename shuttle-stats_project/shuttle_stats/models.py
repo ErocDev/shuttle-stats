@@ -12,3 +12,7 @@ class Match:
     @property
     def winner(self) -> str:
         return self.player1 if self.player1_score > self.player2_score else self.player2
+    
+@dataclass
+class Player:
+    name: str

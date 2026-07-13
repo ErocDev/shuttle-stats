@@ -7,16 +7,32 @@
         <h1>Add a match</h1>
         <form method="POST">
             <label for="player1">Player 1:</label>
-            <input type="text" name="player1" required><br><br>
+            <select name="player1" required>
+                {% for player in players %}
+                    <option value="{{ player.name }}">{{ player.name }}</option>
+                {% endfor %}
+            </select><br>
 
             <label for="player2">Player 2:</label>
-            <input type="text" name="player2" required><br><br>
+            <select name="player2" required>
+                {% for player in players %}
+                    <option value="{{ player.name }}">{{ player.name }}</option>
+                {% endfor %}
+            </select><br>
 
             <label for="player1_score">Player 1 Score:</label>
             <input type="number" name="player1_score" required><br><br>
 
             <label for="player2_score">Player 2 Score:</label>
             <input type="number" name="player2_score" required><br><br>
+
+            {% if errors %}
+                <ul style="color: red;">
+                {% for error in errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
 
             <button type="submit">Add Match</button>
         </form>

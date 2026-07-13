@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Manage Players</title>
+    </head>
+    <body>
+        <h1>Manage Players</h1>
+        <form method="post">
+            <label>New Player Name:</label>
+            <input type="text" name="name" required>
+            <button type="submit">Add Player</button>
+        </form>
+        <h2>Current Players</h2>
+        <ul>
+            {% for player in players %}
+                <li>{{ player.name }}</li>
+            {% endfor %}
+        </ul>
+        <a href="/">Back to Home</a>
+    </body>
+</html>
