@@ -50,3 +50,11 @@ def manage_players():
         return redirect("/players")
     
     return render_template("players.html", players=players)
+
+@app.route("/match/<int:match_id>")
+def match_detail(match_id):
+    if match_id < 0 or match_id >= len(matches):
+        return "Match not found", 404  
+    
+    match = matches[match_id]
+    return render_template("match_detail.html", match=match, match_id=match_id)
