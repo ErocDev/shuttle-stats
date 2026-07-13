@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, redirect
-from datetime import date
 from shuttle_stats.models import Match, Player
 from shuttle_stats.stats import win_rates
 from shuttle_stats.storage import save_data, load_data
@@ -31,11 +30,14 @@ def add_match():
         
         if errors:
             return render_template("add_match.html", players=players, errors=errors)
-
-        match = Match(player1, player2, player1_score, player2_score)
+        try:
+            match = Match(player1, player2, player1_score, player2_score)
+        except ValueError as e:
+            return render_template("add_match.html", players=players, errors=[str(e)])
+        
         matches.append(match)
         save_data(matches, players)
-        return redirect("/")
+        return redirect("/")    
     return render_template("add_match.html", players=players)
 
 @app.route("/players", methods=["GET", "POST"])
