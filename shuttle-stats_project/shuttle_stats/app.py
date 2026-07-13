@@ -2,11 +2,11 @@ from flask import Flask, render_template, request, redirect
 from datetime import date
 from shuttle_stats.models import Match, Player
 from shuttle_stats.stats import win_rates
+from shuttle_stats.storage import save_data, load_data
 
 app = Flask(__name__)
 
-matches: list[Match] = []
-players: list[Player] = []
+matches, players = load_data()
 
 @app.route("/")
 def home():
@@ -34,6 +34,7 @@ def add_match():
 
         match = Match(player1, player2, player1_score, player2_score)
         matches.append(match)
+        save_data(matches, players)
         return redirect("/")
     return render_template("add_match.html", players=players)
 
@@ -43,6 +44,7 @@ def manage_players():
         name = request.form["name"].strip()
         if name and not any(p.name == name for p in players):
             players.append(Player(name))
+        save_data(matches, players)
         return redirect("/players")
     
     return render_template("players.html", players=players)

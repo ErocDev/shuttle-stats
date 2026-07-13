@@ -31,3 +31,6 @@ Thumbs.db
 htmlcov/
  
 # Flask instance folder
+
+
+data.json
