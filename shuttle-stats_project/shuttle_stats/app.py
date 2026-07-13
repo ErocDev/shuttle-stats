@@ -19,17 +19,7 @@ def add_match():
         player2 = request.form["player2"]
         player1_score = int(request.form["player1_score"])
         player2_score = int(request.form["player2_score"])
-
-        errors = []
-        if player1 == player2:
-            errors.append("Players must be different.")
-        if player1_score < 0 or player2_score < 0:
-            errors.append("Scores must be non-negative.")
-        if player1_score == player2_score:
-            errors.append("There must be a winner (no ties allowed).")
         
-        if errors:
-            return render_template("add_match.html", players=players, errors=errors)
         try:
             match = Match(player1, player2, player1_score, player2_score)
         except ValueError as e:
@@ -51,28 +41,24 @@ def manage_players():
     
     return render_template("players.html", players=players)
 
-@app.route("/match/<int:match_id>")
+@app.route("/match/<match_id>")
 def match_detail(match_id):
-    if match_id < 0 or match_id >= len(matches):
-        return "Match not found", 404  
-    
-    match = matches[match_id]
-    return render_template("match_detail.html", match=match, match_id=match_id)
-
-@app.route("/match/<int:match_id>/delete", methods=["POST"])
-def delete_match(match_id):
-    if match_id < 0 or match_id >= len(matches):
+    match = next((m for m in matches if m.id == match_id), None)
+    if match is None:
         return "Match not found", 404
-    
-    matches.pop(match_id)
+    return render_template("match_detail.html", match=match)
+
+@app.route("/match/<match_id>/delete", methods=["POST"])
+def delete_match(match_id):
+    global matches
+    matches = [m for m in matches if m.id != match_id]
     save_data(matches, players)
     return redirect("/")
 
-@app.route("/players/<int:player_id>/delete", methods=["POST"])
+@app.route("/players/<player_id>/delete", methods=["POST"])
 def delete_player(player_id):
-    if player_id < 0 or player_id >= len(players):
-        return "Player not found", 404
-
-    players.pop(player_id)
+    global players
+    players = [p for p in players if p.id != player_id]
     save_data(matches, players)
     return redirect("/players")
+

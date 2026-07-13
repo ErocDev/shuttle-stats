@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <script src="https://cdn.tailwindcss.com"></script>
         <title>Shuttle Stats</title>
     </head>
     <body>
@@ -19,7 +20,7 @@
         <ul>
             {% for match in matches %}
                 <li>
-                    <a href="/match/{{ loop.index0 }}">{{ match.player1 }} {{ match.player1_score }} - {{ match.player2_score }} {{ match.player2 }}</a> (Winner: {{ match.winner }})
+                    <a href="/match/{{ match.id }}">{{ match.player1 }} {{ match.player1_score }} - {{ match.player2_score }} {{ match.player2 }}</a> (Winner: {{ match.winner }})
                 </li>
             {% endfor %}
         </ul>

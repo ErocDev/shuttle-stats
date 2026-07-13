@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from datetime import datetime
+from uuid import uuid4
 
 @dataclass
 class Match:
@@ -8,6 +9,7 @@ class Match:
     player1_score: int
     player2_score: int
     date_played: datetime = field(default_factory=datetime.now)
+    id: str = field(default_factory=lambda: str(uuid4()))
 
     def __post_init__(self):
         if self.player1 == self.player2:
@@ -24,3 +26,4 @@ class Match:
 @dataclass
 class Player:
     name: str
+    id: str = field(default_factory=lambda: str(uuid4()))
