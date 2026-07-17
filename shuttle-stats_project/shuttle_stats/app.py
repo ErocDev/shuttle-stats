@@ -1,3 +1,5 @@
+from datetime import date, datetime
+
 from flask import Flask, render_template, request, redirect
 from shuttle_stats.models import Match, Player
 from shuttle_stats.stats import win_rates
@@ -9,8 +11,29 @@ matches, players = load_data()
 
 @app.route("/")
 def home():
-    rates = win_rates(matches) if matches else {}
-    return render_template("index.html", matches=matches, rates=rates)
+    player_filter = request.args.get("player")
+    date_filter = request.args.get("date")
+    today_only = request.args.get("today")
+
+    filtered_matches = matches
+    if player_filter:
+        filtered_matches = [
+            m for m in filtered_matches if m.player1 == player_filter 
+            or m.player2 == player_filter
+            ]
+    
+    if today_only:
+        filtered_matches = [
+            m for m in filtered_matches if m.date_played.date() == date.today()
+        ]
+    elif date_filter:
+        filter_date = datetime.strptime(date_filter, "%Y-%m-%d").date()
+        filtered_matches = [
+            m for m in filtered_matches if m.date_played.date() == filter_date
+        ]
+
+    rates = win_rates(filtered_matches) if filtered_matches else {}
+    return render_template("index.html", matches=filtered_matches, rates=rates, players=players, selected_player=player_filter, selected_date=date_filter, today_only=today_only)
 
 @app.route("/add", methods=["GET", "POST"])
 def add_match():

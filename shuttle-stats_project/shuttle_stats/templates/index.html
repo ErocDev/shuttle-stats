@@ -1,28 +1,84 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <script src="https://cdn.tailwindcss.com"></script>
-        <title>Shuttle Stats</title>
-    </head>
-    <body>
-        <h1>Shuttle Stats</h1>
-        <p>Welcome to the Shuttle Stats app!</p>
-        <a href="/add">Add a new match</a>
-        <a href="/players">Manage players</a>
+<head>
+    <title>Shuttle Stats</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-8">
+    <div class="max-w-2xl mx-auto">
+        <div class="flex justify-between items-center mb-3">
+            <h1 class="text-3xl font-bold text-gray-800">-Shuttle Stats-</h1>
+            <div class="space-x-2">
+                <a href="/players" class="text-indigo-600 hover:text-indigo-800 font-medium">Manage Players</a>
+                <a href="/add" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 font-medium">+ Add Match</a>
+            </div>
+        </div>
 
-        <h2>Win Rates</h2>
-        <ul>
-            {% for player, rate in rates.items() %}
-                <li>{{ player }}: {{ "%.1f"|format(rate * 100) }}%</li>
-            {% endfor %}
-        </ul>
-        <h2>Match History</h2>
-        <ul>
-            {% for match in matches %}
-                <li>
-                    <a href="/match/{{ match.id }}">{{ match.player1 }} {{ match.player1_score }} - {{ match.player2_score }} {{ match.player2 }}</a> (Winner: {{ match.winner }})
-                </li>
-            {% endfor %}
-        </ul>
-    </body>
+        <div class="bg-white rounded-xl shadow p-6 mb-6">
+            <div class="mb-6">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4 underline">Win Rates</h2>
+            {% if rates %}
+                <ul class="space-y-1">
+                    {% for player, rate in rates.items() %}
+                        <li class="flex justify-between border-t border-gray-100">
+                            <span class="text-gray-700">{{ player }}</span>
+                            <span class="font-semibold text-indigo-600">{{ "%.1f"|format(rate * 100) }}%</span>
+                        </li>
+                    {% endfor %}
+                    <li class="border-b border-gray-100"></li>
+                </ul>
+            {% else %}
+                <p class="text-gray-400">No matches recorded yet.</p>
+            {% endif %}
+            </div>
+            <div class="bg-white rounded-xl border shadow p-6 mb-1">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4 underline">Match History</h2>
+                <h2 class="text-lg font-semibold text-gray-800 mb-3">Filter Matches</h2>
+                <div class="mb-2">
+                    <form method="GET" class="flex flex-wrap gap-3 items-end">
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-1">Player</label>
+                            <select name="player" class="border border-gray-300 rounded-lg px-3 py-2">
+                                <option value="">All players</option>
+                                {% for player in players %}
+                                    <option value="{{ player.name }}" {% if selected_player == player.name %}selected{% endif %}>
+                                        {{ player.name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-1">Date</label>
+                            <input type="date" name="date" value="{{ selected_date or '' }}"
+                                class="border border-gray-300 rounded-lg px-3 py-2">
+                        </div>
+                        <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 font-medium">
+                            Filter
+                        </button>
+                        <a href="/?today=1" class="text-indigo-600 hover:text-indigo-800 font-medium px-2 py-2">Today only</a>
+                        <a href="/" class="text-gray-500 hover:text-gray-700 px-2 py-2">Clear</a>
+                    </form>
+                </div>
+                <div>
+                    {% if matches %}
+                        <ul class="space-y-2">
+                            {% for match in matches %}
+                                <li>
+                                    <a href="/match/{{ match.id }}" class="block p-3 rounded-lg hover:bg-gray-50 border border-gray-100">
+                                        <span class="font-medium">{{ match.player1 }}</span>
+                                        <span class="text-gray-500 mx-1">{{ match.player1_score }} - {{ match.player2_score }}</span>
+                                        <span class="font-medium">{{ match.player2 }}</span>
+                                        <span class="text-sm text-indigo-600 ml-2">Winner: {{ match.winner }}</span>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-gray-400">No matches yet.</p>
+                    {% endif %}   
+                </div>           
+            </div>
+        </div>
+    </div>
+</body>
 </html>

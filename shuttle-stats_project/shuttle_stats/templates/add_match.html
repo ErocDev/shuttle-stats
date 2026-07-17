@@ -1,42 +1,51 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <script src="https://cdn.tailwindcss.com"></script>
-        <title>Add Match</title>
-    </head>
-    <body>
-        <h1>Add a match</h1>
-        <form method="POST">
-            <label for="player1">Player 1:</label>
-            <select name="player1" required>
-                {% for player in players %}
-                    <option value="{{ player.name }}">{{ player.name }}</option>
-                {% endfor %}
-            </select><br>
+<head>
+    <title>Add Match</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-8">
+    <div class="max-w-xl w-full mx-auto bg-white rounded-xl shadow p-6">
+        <h1 class="text-2xl font-bold text-gray-800 mb-4">Add a Match</h1>
 
-            <label for="player2">Player 2:</label>
-            <select name="player2" required>
-                {% for player in players %}
-                    <option value="{{ player.name }}">{{ player.name }}</option>
-                {% endfor %}
-            </select><br>
-
-            <label for="player1_score">Player 1 Score:</label>
-            <input type="number" name="player1_score" required><br><br>
-
-            <label for="player2_score">Player 2 Score:</label>
-            <input type="number" name="player2_score" required><br><br>
-
-            {% if errors %}
-                <ul style="color: red;">
-                {% for error in errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
+        {% if errors %}
+            <div class="bg-red-50 border border-red-200 text-red-700 rounded-lg p-3 mb-4">
+                <ul class="list-disc list-inside">
+                    {% for error in errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
                 </ul>
-            {% endif %}
+            </div>
+        {% endif %}
 
-            <button type="submit">Add Match</button>
+        <form method="POST" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Player 1</label>
+                <select name="player1" required class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                    {% for player in players %}
+                        <option value="{{ player.name }}">{{ player.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Player 1 Score</label>
+                <input type="number" name="player1_score" required class="w-full border border-gray-300 rounded-lg px-3 py-2">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Player 2</label>
+                <select name="player2" required class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                    {% for player in players %}
+                        <option value="{{ player.name }}">{{ player.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Player 2 Score</label>
+                <input type="number" name="player2_score" required class="w-full border border-gray-300 rounded-lg px-3 py-2">
+            </div>
+            <button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 font-medium">Add Match</button>
         </form>
-        <a href="/">Back to Home</a>
-    </body>
+        <a href="/" class="block text-center text-indigo-600 hover:text-indigo-800 mt-4">Back to home</a>
+    </div>
+</body>
 </html>
